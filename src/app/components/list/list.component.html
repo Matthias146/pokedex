@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <div class="row row-cols-2 row-cols-md-4 g-3">
+    <div class="col" *ngFor="let p of pokemons">
+      <div
+        class="card h-100 text-center"
+        (click)="openDetails(p)"
+        style="cursor: pointer"
+      >
+        <div class="card-body">
+          <h5 class="card-title text-capitalize">{{ p.name }}</h5>
+          <img
+            [src]="
+              'https://img.pokemondb.net/sprites/home/normal/' + p.name + '.png'
+            "
+            [alt]="p.name"
+            class="img-fluid"
+            style="max-height: 96px"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="pokemonModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" *ngIf="selectedPokemon">
+      <div class="modal-header">
+        <h5 class="modal-title text-capitalize">{{ selectedPokemon.name }}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          [src]="selectedPokemon.sprites.front_default"
+          class="img-fluid mb-3"
+          alt="{{ selectedPokemon.name }}"
+        />
+
+        <p>
+          <strong>Typen:</strong>
+          <span
+            *ngFor="let t of selectedPokemon.types"
+            class="badge bg-secondary me-1 text-capitalize"
+          >
+            {{ t.type.name }}
+          </span>
+        </p>
+
+        <p><strong>Größe:</strong> {{ selectedPokemon.height }}</p>
+        <p><strong>Gewicht:</strong> {{ selectedPokemon.weight }}</p>
+
+        <h6>Stats</h6>
+        <ul class="list-group">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let stat of selectedPokemon.stats"
+          >
+            {{ stat.stat.name }}
+            <span class="badge bg-primary rounded-pill">{{
+              stat.base_stat
+            }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="container mt-4" *ngIf="pokemon">
+  <div class="card">
+    <div class="card-header text-center">
+      <h2 class="text-capitalize">{{ pokemon.name }}</h2>
+    </div>
+    <div class="card-body text-center">
+      <img
+        [src]="pokemon.sprites?.front_default"
+        [alt]="pokemon.name"
+        class="img-fluid mb-3"
+      />
+      <p><strong>Größe:</strong> {{ pokemon.height }}</p>
+      <p><strong>Gewicht:</strong> {{ pokemon.weight }}</p>
+      <p>
+        <strong>Typ:</strong>
+        <span
+          *ngFor="let t of pokemon.types"
+          class="badge bg-secondary me-1 text-capitalize"
+          >{{ t.type.name }}</span
+        >
+      </p>
+    </div>
+  </div>
+</div>
