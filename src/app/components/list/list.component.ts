@@ -12,12 +12,30 @@ import { NgFor, NgIf } from '@angular/common';
 export class ListComponent implements OnInit {
   pokemons: any[] = [];
   selectedPokemon: any = null;
+  loading = false;
 
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit(): void {
+    this.loadMore();
+  }
+
+  loadMore(): void {
+    this.loading = true;
+
     this.pokemonService.getNext().subscribe((res: any) => {
-      this.pokemons = res.results;
+      const results = res.results;
+
+      results.forEach((pokemon: any) => {
+        this.pokemonService.get(pokemon.name).subscribe((details) => {
+          const type = this.pokemonService.getType(details);
+          pokemon.type = type;
+          pokemon.color = this.pokemonService.getTypeColor(type);
+          this.pokemons.push(pokemon);
+        });
+      });
+
+      this.loading = false;
     });
   }
 

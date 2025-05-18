@@ -39,8 +39,17 @@ export class PokemonService {
   }
 
   getNext(): Observable<any> {
-    const url = this._next === '' ? `${this.pokemonUrl}?limit=100` : this._next;
-    return this.http.get<any>(url);
+    const url = this._next === '' ? `${this.pokemonUrl}?limit=20` : this._next;
+    return new Observable((observer) => {
+      this.http.get<any>(url).subscribe({
+        next: (res) => {
+          this._next = res.next;
+          observer.next(res);
+          observer.complete();
+        },
+        error: (err) => observer.error(err),
+      });
+    });
   }
 
   getEvolution(id: number): Observable<any> {
@@ -51,5 +60,30 @@ export class PokemonService {
   getSpecies(name: string): Observable<any> {
     const url = `${this.baseUrl}pokemon-species/${name}`;
     return this.http.get<any>(url);
+  }
+
+  getTypeColor(type: string): string {
+    const colors: { [key: string]: string } = {
+      fire: '#F08030',
+      water: '#6890F0',
+      grass: '#78C850',
+      electric: '#F8D030',
+      psychic: '#F85888',
+      ice: '#98D8D8',
+      dragon: '#7038F8',
+      dark: '#705848',
+      fairy: '#EE99AC',
+      normal: '#A8A878',
+      fighting: '#C03028',
+      flying: '#A890F0',
+      poison: '#A040A0',
+      ground: '#E0C068',
+      rock: '#B8A038',
+      bug: '#A8B820',
+      ghost: '#705898',
+      steel: '#B8B8D0',
+    };
+
+    return colors[type] || '#A8A878'; // fallback: normal
   }
 }
